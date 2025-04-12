@@ -9,7 +9,7 @@ const GetStarted = () => {
     return (
       <div className="body-content">
         <div className="nav-bar-s">
-            <div className="logo">BrandSight </div>
+            <div className="logo-s">BrandSight </div>
             <div className="nav-links">
                 <a href="#">Home</a>
                 <a href="#features">Features</a>

@@ -1,0 +1,123 @@
+.page{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 100vh;
+
+    background-color: black;
+    font-family:'Poppins', Times, serif;
+}
+.left-logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50%;
+    height: 100%;
+
+    background-color: #18181b;
+}
+.logo-box{
+    background-color: #01b954;
+}
+.logo-name{
+    padding: 0px 10px;
+
+    font-weight: 800;
+    font-size: 56px;
+    color: white;
+}
+.right-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50%;
+    height: 100%;
+
+    background-color: #ffffff;
+}
+.content-container{
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    width: 500px;
+
+    padding: 80px;
+
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    background-color: rgb(228, 228, 228);
+}
+.back-link{
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    text-decoration: none;
+    color: gray;
+}
+.ls-text{
+    width: 100%;
+
+    font-size: 64px;
+}
+.sub-text{
+    width: 100%;
+
+    font-size: 18px;
+
+    margin-bottom: 20px;
+}
+.label-input{
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+}
+.label-input label{
+    width: 100%;
+
+    font-size: 28px;
+}
+.name-section, .email-section, .password-section{
+    width: 100%;
+
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 4px;
+}
+.email-section:focus{
+    outline: none;
+}
+
+.submit-btn{
+    align-self: center;
+
+    width: 100%;
+
+    border: none;
+    border-radius: 8px;
+    
+    padding: 10px;
+    margin-top: 12px;
+
+    font-size: 20px;
+
+    background-color: #01b954;
+    color: white;
+}
+.question{
+    text-align: center;
+    margin-top: 20px;
+}
+.question a{
+    text-decoration: none;
+
+    color: rgb(0, 128, 255);
+}

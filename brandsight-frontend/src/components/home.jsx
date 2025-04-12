@@ -8,7 +8,7 @@ const Home = () => {
                 <div className="nav-bar">
                     <div className="menu-button">
                         <img src="/menu-icon.png" alt="Menu" className="icon-image" />
-                        <p className="logo-h">BrandSight </p>
+                        <p className="logo">BrandSight </p>
                     </div>
 
                     <div className="profile-img">
@@ -48,7 +48,7 @@ const Home = () => {
                 
                     <p className="heading">Analyze a Brand's Reputation</p>
                     <p className="sub-heading">Get real-time sentiment insights from app or store reviews</p>
-                    <input type="text" className="input-field" placeholder="Enter URL" />
+                    <input type="text" className="url-field" placeholder="Enter URL" />
                 
                     <button className="fetch-btn">Fetch & Analyze ➜</button>
         
