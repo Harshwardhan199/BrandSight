@@ -8,7 +8,6 @@ import { auth } from "../firebase.js";
 import './loginSignUp.css';
 
 const Login = () =>{
-
     const navigate = useNavigate();
 
     const emailRef = useRef(null);
@@ -36,52 +35,68 @@ const Login = () =>{
         }
     };
 
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+          console.log("Logged in as:", userCredential.user.email);
+    
+          navigate("/home");
+        } catch (error) {
+          console.error("Login error:", error.message);
+        }
+    };
+
     return(
         <div className="page">
-        <div className="left-logo">
-            <div className="logo-box">
-                <p className="logo-name">BrandSight </p>
+            <div className="left-logo">
+                <div className="logo-box">
+                    <p className="logo-name">BrandSight </p>
+                </div>
+            </div>
+            <div className="right-container">
+                <div className="content-container">
+
+                    <Link className="back-link" to="/">&lt; Back</Link>
+
+                    <p className="ls-text">Login</p>
+
+                    <p className="sub-text">Welcome Back!</p>
+
+                    <form onSubmit={handleLogin}>
+                        <div className="label-input">
+                            <label>Email Address</label>
+                            <input 
+                                className="email-section"
+                                type="text"
+                                value={email}
+                                ref={emailRef}
+                                onChange={(e) => checkAndSetEmail(e)}
+                                required
+                            />
+                        </div>
+
+                        {email.length>0 && !emailIsValid && <p className="error-text">Enter Valid Email</p>}
+
+                        <div className="label-input">
+                            <label>Password</label>
+                            <input 
+                                className="password-section"
+                                type="text" 
+                                value={password}
+                                ref={passwordRef}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button className="submit-btn" type="submit">Login Account</button>
+                    </form>
+
+                    <p className="question">Don't have an account? <Link to="/signup">SignUp</Link></p>
+                </div>
             </div>
         </div>
-        <div className="right-container">
-            <div className="content-container">
-
-                <Link className="back-link" to="/">&lt; Back</Link>
-
-                <p className="ls-text">Login</p>
-
-                <p className="sub-text">Welcome Back!</p>
-
-                <form action="">
-                    <div className="label-input">
-                        <label for="">Email Address</label>
-                        <input 
-                            className="email-section"
-                            type="text"
-                            value={email}
-                            ref={emailRef}
-                            onChange={(e) => checkAndSetEmail(e)}
-                            required
-                        />
-                    </div>
-                    <div className="label-input">
-                        <label for="">Password</label>
-                        <input 
-                            className="password-section"
-                            type="text" 
-                            value={password}
-                            ref={passwordRef}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button className="submit-btn" onClick={() => navigate("/home")}>Login Account</button>
-                </form>
-
-                <p className="question">Don't have an account? <Link to="/signup">SignUp</Link></p>
-            </div>
-        </div>
-    </div>
     );
 };
 

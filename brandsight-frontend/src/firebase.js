@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDUVCNSv3xWghRmN1EBPO4LAxmoYElszeY",
-  authDomain: "fablook-bec3d.firebaseapp.com",
-  projectId: "fablook-bec3d",
-  storageBucket: "fablook-bec3d.firebasestorage.app",
-  messagingSenderId: "963419341803",
-  appId: "1:963419341803:web:6aed91c085cf950f5f8fae"
+  apiKey: "AIzaSyD4H1185NP5Q-1QzzHKqY2DXADCM78uDRU",
+  authDomain: "brandsight-49913.firebaseapp.com",
+  projectId: "brandsight-49913",
+  storageBucket: "brandsight-49913.firebasestorage.app",
+  messagingSenderId: "1034587018099",
+  appId: "1:1034587018099:web:bddbb8678abbff62d46b06"
 };
 
 const app = initializeApp(firebaseConfig);
