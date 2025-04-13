@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../firebase.js";
-import {createUserWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+import axios from "axios";
 
 import './loginSignUp.css'
 
@@ -83,15 +85,11 @@ const SignUp = () =>{
 
         const passTomatch = e.target.value;
 
-        console.log(password, passTomatch);
-
         if (password === passTomatch){
-            console.log("galat hai");
           setPasswordNotMatched(false);
           confirmPasswordRef.current.style.borderColor = "black";
         }
         else{
-            console.log("galat hai");
           setPasswordNotMatched(true);
           confirmPasswordRef.current.style.borderColor = passTomatch.length > 0 ? "red" : "black";
         }
@@ -101,36 +99,52 @@ const SignUp = () =>{
         e.preventDefault();
     
         try{
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        //   const user = userCredential.user;
-    
-            //Request to backend to add user data to DB.
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
             
-        //   await axios.post("http://localhost:5000/api/users/registerUser", {
-        //     UID: user.uid,
-        //     name,
-        //     email,
-        //     password,
-        //   }, {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   });
-    
-          console.log("User created as:", userCredential.user.email);
-          
-          navigate("/login");
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&length=1&background=random&font-size=0.7`;
+            await updateProfile(user, {
+                // displayName: name,
+                photoURL: avatarUrl,
+            });
+
+            await axios.post("http://localhost:5000/api/users/registerUser", {
+            UID: user.uid,
+            name,
+            email,
+            password,
+            }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            });
+
+            console.log("User created as:", userCredential.user.email, userCredential.user.photoURL);
+            
+            navigate("/login");
         }
         catch(error) {
-          console.error("SignUp error:", error.message);
+            console.error("SignUp error:", error.message);
         }
     };
 
     const handleGoogleSignIn = async () => {
-        console.log("Google se login karega");
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
+
+            // console.log("User Details: ", user);
+
+            await axios.post("http://localhost:5000/api/users/registerUser", {
+                UID: user.uid,
+                name: user.displayName,
+                email: user.email,
+                password: null,
+              }, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
 
             console.log("Google user created/logged in:", user.displayName, user.email, user.photoURL);
 

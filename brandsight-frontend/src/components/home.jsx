@@ -2,6 +2,8 @@ import React, {useState, useRef, useEffect} from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 import './home.css';
 import useCurrentUser from "./currentUser";
 
@@ -11,13 +13,14 @@ const Home = () => {
     
     const [profileImageUrl, setProfileImageUrl] = useState("");
 
-    
     useEffect(() => {
     if (user) {
 
         console.log("Logged in user:", user.email);
+        // console.log("User object:", user.uid);
 
-        // console.log("User object:", user);
+        // retrieveUserData();
+
         // console.log("Photo Url", user.photoURL);
 
         if (user.photoURL) {
@@ -34,6 +37,24 @@ const Home = () => {
         setProfileImageUrl(null);
     }
     }, [user]);
+
+    const retrieveUserData = async () => {
+    try{
+        const response = await axios.post("http://localhost:5000/api/users/getUserData", {
+            UID: user.uid
+            }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        console.log(`User Name: ${response.data.name}`);
+        // setUserName(response.data.name);
+    }
+    catch(error){
+        console.error("Error Fetching User Data:", error.message);
+    }
+    };
 
     const Logout = () => {
         const auth = getAuth();

@@ -6,6 +6,8 @@ import { auth } from "../firebase.js";
 import {signInWithEmailAndPassword } from "firebase/auth";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+import axios from "axios";
+
 import './loginSignUp.css';
 
 const Login = () =>{
@@ -52,16 +54,27 @@ const Login = () =>{
         }
     }
 
-    const handleGoogleSignIn = async (e) => {
+    const handleGoogleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
 
-            console.log("Google user:", user.displayName, user.email, user.photoURL);
+            await axios.post("http://localhost:5000/api/users/registerUser", {
+                UID: user.uid,
+                name: user.displayName,
+                email: user.email,
+                password: null,
+              }, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+
+            console.log("Google user created/logged in:",user.uid, user.displayName, user.email, user.photoURL);
 
             navigate("/home");
         } catch (error) {
-            console.error("Google Sign-In Error:", error.message);
+            console.error("Google Sign-Up error:", error.message);
         }
     };
 
