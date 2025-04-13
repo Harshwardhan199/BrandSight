@@ -29,7 +29,7 @@ const GetStarted = () => {
                     <p className="subHeading-1">Get instant insights with sentiment analysis, keyword trends, and growth suggestions.</p>
                 </div>
                 <div className="about-img">
-                    <img src="" alt="" />
+                    <img src="null" alt="About Image" />
                 </div>
             </div>
             <button className="startAnalyzing" onClick={() => navigate("/home")}>Start Analyzing ➜</button>
@@ -39,19 +39,19 @@ const GetStarted = () => {
             <p>Features</p>
             <div className="features">
                 <div className="feature">
-                    <img src="" alt="" />
+                    <img src="null" alt="Feature 1" />
                     <p>Sentiment Overview</p>
                 </div>
                 <div className="feature">
-                    <img src="" alt="" />
+                    <img src="null" alt="Feature 2" />
                     <p>Keyword Extraction</p>
                 </div>
                 <div className="feature">
-                    <img src="" alt="" />
+                    <img src="null" alt="Feature 3" />
                     <p>Smart Suggestions</p>
                 </div>
                 <div className="feature">
-                    <img src="" alt="" />
+                    <img src="null" alt="Feature 4" />
                     <p>Supports Apps + Physical Stores</p>
                 </div>
             </div>
@@ -78,13 +78,13 @@ const GetStarted = () => {
                         <p>Contact Us</p>
                     </div>
                     
-                    <form className="">
+                    <form>
                         <div className="label-input">
-                            <label for="">Email</label>
+                            <label>Email</label>
                             <input type="text" />
                         </div>
                         <div className="label-input">
-                            <label for="">Message</label>
+                            <label>Message</label>
                             <textarea rows="4"></textarea>
                         </div>
                         <button type="submit" className="send-btn">Send Message</button>
@@ -93,8 +93,8 @@ const GetStarted = () => {
             </div>
         </div>
       </div>
-    )
-}
+    );
+};
   
 export default GetStarted;
   

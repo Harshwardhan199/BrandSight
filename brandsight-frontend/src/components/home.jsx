@@ -1,7 +1,53 @@
-import './home.css'
+import React, {useState, useRef, useEffect} from "react";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+import './home.css';
+import useCurrentUser from "./currentUser";
 
 const Home = () => {
+    const user = useCurrentUser();
+    const navigate = useNavigate();
+    
+    const [profileImageUrl, setProfileImageUrl] = useState("");
 
+    
+    useEffect(() => {
+    if (user) {
+
+        console.log("Logged in user:", user.email);
+
+        // console.log("User object:", user);
+        // console.log("Photo Url", user.photoURL);
+
+        if (user.photoURL) {
+            // console.log("Photo Found");
+            setProfileImageUrl(user.photoURL); 
+        }
+        else{
+            console.log("Photo not found");
+        }
+
+    } else {
+        console.log("No user is currently logged in.");
+
+        setProfileImageUrl(null);
+    }
+    }, [user]);
+
+    const Logout = () => {
+        const auth = getAuth();
+        signOut(auth)
+          .then(() => {
+            console.log("User logged out successfully.");
+    
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error("Error during sign out:", error.message);
+          });
+      };
+    
     return (
         <>
             <div className="body-division">
@@ -12,7 +58,11 @@ const Home = () => {
                     </div>
 
                     <div className="profile-img">
-                        {/* <img src="" alt="" className="user-image">  */}
+                        <img 
+                            src={profileImageUrl || "/default-avatar.png"} 
+                            alt="Profile Image" 
+                            className="user-image" 
+                        /> 
                     </div>
                 </div>
 
@@ -34,7 +84,7 @@ const Home = () => {
 
                     <div className="sidebar-bottom">
                         <div className="nav-link">
-                            <img src="/settings-icon.png" alt="Settings" className="icon-image" />
+                            <img src="/settings-icon.png" alt="Settings" className="icon-image" onClick={Logout} />
                             {/* <a href="">Settings</a>  */}
                         </div>
                         {/* <div className="nav-link">
@@ -52,7 +102,7 @@ const Home = () => {
                 
                     <button className="fetch-btn">Fetch & Analyze ➜</button>
         
-                    <div className="overview">
+                    {/* <div className="overview">
                         <p className='over-heading'>Overview</p>
 
                         <div className='results'>
@@ -103,13 +153,13 @@ const Home = () => {
                         <p className='over-heading'>Suggestions</p>
 
                         <p className='suggestion'>Users are not able to login, there is a but in the login syatem fix it to increase your brand reputation</p>
-                    </div> 
+                    </div>  */}
                     
                 </div>
 
             </div>
         </>
-    )
-}
+    );
+};
   
 export default Home;

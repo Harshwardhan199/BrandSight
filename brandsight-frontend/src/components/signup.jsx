@@ -2,13 +2,18 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import {createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
+import {createUserWithEmailAndPassword } from "firebase/auth";
+
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import './loginSignUp.css'
 
 const SignUp = () =>{
     const navigate = useNavigate();
+
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -92,13 +97,15 @@ const SignUp = () =>{
         }
     };
 
-    const handleSignUp = async (e) => {
+    const handleEmailSignUp = async (e) => {
         e.preventDefault();
     
         try{
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         //   const user = userCredential.user;
     
+            //Request to backend to add user data to DB.
+            
         //   await axios.post("http://localhost:5000/api/users/registerUser", {
         //     UID: user.uid,
         //     name,
@@ -119,6 +126,20 @@ const SignUp = () =>{
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        console.log("Google se login karega");
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            console.log("Google user created/logged in:", user.displayName, user.email, user.photoURL);
+
+            navigate("/home");
+        } catch (error) {
+            console.error("Google Sign-Up error:", error.message);
+        }
+    };
+
     return(
         <div className="page">
             <div className="left-logo">
@@ -135,7 +156,7 @@ const SignUp = () =>{
 
                     <p className="sub-text">Welcome!</p>
 
-                    <form onSubmit={handleSignUp}>
+                    <form onSubmit={handleEmailSignUp}>
                         <div className="label-input">
                             <label>Name</label>
                             <input 
@@ -197,6 +218,10 @@ const SignUp = () =>{
                         {isConfirmPasswordFocused && confirmPassword.length > 0 && passwordNotMatched && <p className="error-text">Passwords don't match</p>}
 
                         <button className="submit-btn" type="submit">Create Account</button>
+
+                        <div className="line"><span className="or-text">Or</span></div>
+
+                        <button className="google-btn" onClick={handleGoogleSignIn}>SignIn with Google</button>
                     </form>
 
                     <p className="question">Already have an account? <Link to="/login">Login</Link></p>

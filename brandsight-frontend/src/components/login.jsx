@@ -2,13 +2,17 @@ import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import {signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
+import {signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import './loginSignUp.css';
 
 const Login = () =>{
     const navigate = useNavigate();
+
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -35,7 +39,7 @@ const Login = () =>{
         }
     };
 
-    const handleLogin = async (e) => {
+    const handleEmailLogin = async (e) => {
         e.preventDefault();
         try {
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -45,6 +49,19 @@ const Login = () =>{
           navigate("/home");
         } catch (error) {
           console.error("Login error:", error.message);
+        }
+    }
+
+    const handleGoogleSignIn = async (e) => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            console.log("Google user:", user.displayName, user.email, user.photoURL);
+
+            navigate("/home");
+        } catch (error) {
+            console.error("Google Sign-In Error:", error.message);
         }
     };
 
@@ -64,7 +81,7 @@ const Login = () =>{
 
                     <p className="sub-text">Welcome Back!</p>
 
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleEmailLogin}>
                         <div className="label-input">
                             <label>Email Address</label>
                             <input 
@@ -91,6 +108,10 @@ const Login = () =>{
                             />
                         </div>
                         <button className="submit-btn" type="submit">Login Account</button>
+
+                        <div className="line"><span className="or-text">Or</span></div>
+                        
+                        <button className="google-btn" onClick={handleGoogleSignIn}>SignIn with Google</button>
                     </form>
 
                     <p className="question">Don't have an account? <Link to="/signup">SignUp</Link></p>
