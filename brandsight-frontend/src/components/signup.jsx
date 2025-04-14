@@ -162,9 +162,10 @@ const SignUp = () =>{
                 </div>
             </div>
             <div className="right-container">
-                <div className="content-container">
+                
+                <Link className="back-link" to="/">&lt; Back</Link>
 
-                    <Link className="back-link" to="/">&lt; Back</Link>
+                <div className="content-container">
 
                     <p className="ls-text">SignUp</p>
 

@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
 
-    width: 50%;
+    width: 47%;
     height: 100%;
 
     background-color: #18181b;
@@ -33,44 +33,46 @@
     align-items: center;
     justify-content: center;
 
-    width: 50%;
+    position: relative;
+
+    flex: 1;
     height: 100%;
 
-    background-color: #ffffff;
+    background-color: rgb(245, 245, 245);
+
+}
+.back-link{
+    position: absolute;
+
+    top: 50px;
+    right: 50px;
+
+    text-decoration: none;
+    color: gray;
 }
 .content-container{
     display: flex;
     flex-direction: column;
 
-    position: relative;
+    flex: 1;
+    max-width: 550px;
 
-    width: 500px;
-
-    padding: 80px;
-
+    padding: 30px 50px;
+    margin: 0px 40px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    background-color: rgb(228, 228, 228);
-}
-.back-link{
-    position: absolute;
-
-    top: 16px;
-    right: 16px;
-
-    text-decoration: none;
-    color: gray;
+    background-color: rgb(245, 245, 245);
 }
 .ls-text{
     width: 100%;
 
-    font-size: 64px;
+    font-size: 56px;
 }
 .sub-text{
     width: 100%;
 
-    font-size: 18px;
+    font-size: 20px;
 
     margin-bottom: 20px;
 }
@@ -83,7 +85,7 @@
 .label-input label{
     width: 100%;
 
-    font-size: 28px;
+    font-size: 24px;
 }
 .name-section, .email-section, .password-section{
     width: 100%;
@@ -121,13 +123,14 @@
     width: 100%;
     height: 1px;
 
-    margin-top: 12px;
+    margin: 20px 0px;
+    /* margin-top: 12px; */
 
     background-color: black;
 }
 .or-text{
     padding: 0px 10px;
-    background-color: #e4e4e4;
+    background-color: rgb(245, 245, 245);
 }
 .google-btn{
     align-self: center;
@@ -138,7 +141,6 @@
     border-radius: 8px;
     
     padding: 10px;
-    margin-top: 12px;
 
     font-size: 20px;
 
@@ -147,10 +149,38 @@
 }
 .question{
     text-align: center;
+    
     margin-top: 20px;
 }
 .question a{
     text-decoration: none;
 
     color: rgb(0, 128, 255);
+}
+@media (max-width: 1000px) {
+    .left-logo {
+        display: none;
+    }
+}
+@media (max-width: 650px) {
+    .content-container {
+        width: 400;
+        padding: 20px 50px;
+    }
+    .ls-text{
+        font-size: 48px;
+    }
+    .label-input label{    
+        font-size: 20px;
+    }
+    .submit-btn, .google-btn{
+        font-size: 16px;
+    }
+    .question{
+        font-size: 12px;
+    }
+    .back-link{
+        top: 10px;
+        right: 10px;
+    }
 }

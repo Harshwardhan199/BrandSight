@@ -85,10 +85,12 @@ const Login = () =>{
                     <p className="logo-name">BrandSight </p>
                 </div>
             </div>
-            <div className="right-container">
-                <div className="content-container">
 
-                    <Link className="back-link" to="/">&lt; Back</Link>
+            <div className="right-container">
+                
+                <Link className="back-link" to="/">&lt; Back</Link>
+
+                <div className="content-container">
 
                     <p className="ls-text">Login</p>
 
@@ -120,7 +122,7 @@ const Login = () =>{
                                 required
                             />
                         </div>
-                        <button className="submit-btn" type="submit">Login Account</button>
+                        <button className="submit-btn" type="submit">Login</button>
 
                         <div className="line"><span className="or-text">Or</span></div>
                         

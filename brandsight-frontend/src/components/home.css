@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
 
-    height: 100vh;
-
     font-family:'Poppins', Times, serif;
 }
 
@@ -49,6 +47,15 @@
 
     background-color: #01b954;
     color: white;
+}
+.profile-section{
+    display: flex;
+
+    gap: 20px;
+}.user-name{
+    color: white;
+
+    font-size: 24px;
 }
 .profile-img{
     height: 40px;
@@ -123,6 +130,8 @@
     text-align: center;
     font-weight: 1000;
     font-size: 64px;
+
+    margin-top: 14%;
 }
 .sub-heading{
     font-size: 24px;
@@ -169,10 +178,10 @@
     align-items: center;
     justify-content: center;
 
-    width: 100%;
+    flex: 1;
 
-    padding: 30px 0px;
-    margin-top: 80px;
+    padding: 30px 30px;
+    margin: 80px 20px 0px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);
@@ -182,7 +191,7 @@
     font-weight: 1000;
     font-size: 48px;
 }
-.results{
+.over-results{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,6 +207,39 @@
 
     font-size: 28px;
 }
+
+.review-breakdown{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+
+    padding: 30px 30px;
+    margin: 80px 20px 50px 20px;
+
+    border-radius: 8px;
+    background-color: rgb(231, 231, 231);
+}
+.results{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+}
+.expand-btns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 50px;
+    margin-bottom: 20px;
+
+    gap: 20px;
+}
 .sentiment-category{
     padding: 10px;
 
@@ -208,20 +250,46 @@
     color: white;
     font-size: 36px;
 }
-
-.review-breakdown{
+.reviews{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
     width: 100%;
+    
+    gap: 10px;
+}
+.reviews::-webkit-scrollbar {
+    width: 8px;
+}
+.reviews::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+.reviews::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+.reviews::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
 
-    padding: 30px 0px;
-    margin-top: 80px;
+.review{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    border-radius: 8px;
-    background-color: rgb(231, 231, 231);
+    width: 100%;
+
+    padding: 16px;
+
+    border-radius: 4px;
+    background-color: rgb(201, 201, 201);
+
+    font-size: 20px;
+    color: color;
 }
 
 .keywords{
@@ -230,10 +298,10 @@
     align-items: center;
     justify-content: center;
 
-    width: 100%;
+    flex: 1;
 
-    padding: 30px;
-    margin-top: 80px;
+    padding: 30px 30px;
+    margin: 80px 20px 0px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);
@@ -275,10 +343,10 @@
     align-items: center;
     justify-content: center;
 
-    width: 100%;
+    flex: 1;
 
-    padding: 30px 0px;
-    margin-top: 80px;
+    padding: 30px 30px;
+    margin: 80px 20px 50px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);

@@ -15,7 +15,7 @@ const GetStarted = () => {
                 <a href="#features">Features</a>
                 <a href="#contact">Contact</a>
             </div>
-            <div className="nav-links">
+            <div className="nav-links-r">
                 <Link to="/login">Login</Link>
                 <button className="signUp-btn" onClick={() => navigate("/signup")}>SignUp</button>
             </div>
@@ -85,7 +85,7 @@ const GetStarted = () => {
                         </div>
                         <div className="label-input">
                             <label>Message</label>
-                            <textarea rows="4"></textarea>
+                            <textarea rows="5"></textarea>
                         </div>
                         <button type="submit" className="send-btn">Send Message</button>
                     </form>
