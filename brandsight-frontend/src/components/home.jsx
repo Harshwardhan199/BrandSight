@@ -11,8 +11,6 @@ const Home = () => {
     const user = useCurrentUser();
     const navigate = useNavigate();
     
-    const headingRef = useRef(null);
-
     const [username, setUsername] = useState("User");
     const [profileImageUrl, setProfileImageUrl] = useState("");
     const [brandURL, setBrandURL] = useState("");
@@ -67,7 +65,8 @@ const Home = () => {
         });
 
         console.log(`User Name: ${response.data.name}`);
-        setUsername(response.data.name);
+        const firstName = response.data.name.split(" ")[0];
+        setUsername(firstName);
     }
     catch(error){
         console.error("Error Fetching User Data:", error.message);
@@ -90,8 +89,6 @@ const Home = () => {
     const analyzeBrand = async () => {
 
         setGotResult(false);
-
-        headingRef.current.style.marginTop = "14%";
 
         const playStoreRegex = /^https:\/\/play\.google\.com\/store\/apps\/details\?id=[\w\.]+/;
         const mapsRegex = /^https:\/\/www\.google\.[a-z.]+\/maps\/place\/[^\/]+\/@[\d.,z]+\/data=/;
@@ -121,8 +118,6 @@ const Home = () => {
             });
 
             console.log("Analysis Report:", response.data);
-
-            headingRef.current.style.marginTop = "4%";
 
             setResult({
                 summary: response.data.summary,
@@ -211,7 +206,7 @@ const Home = () => {
 
                 <div className="main-panel">
                 
-                    <p className="heading" ref={headingRef}>Analyze a Brand's Reputation</p>
+                    <p className="heading">Analyze a Brand's Reputation</p>
                     <p className="sub-heading">Get real-time sentiment insights from app or store reviews</p>
                     <input 
                         type="text" 
@@ -223,7 +218,7 @@ const Home = () => {
                     <button className="fetch-btn" onClick={analyzeBrand}>Fetch & Analyze ➜</button>
 
                     {gotResult && 
-                        <div>
+                        <div className="result-container">
                             <div className="overview">
                                 <p className='over-heading'>Overview</p>
 
@@ -236,15 +231,6 @@ const Home = () => {
                                 <p className='over-text'>Most users had a positive experience overall.</p>
                             </div>
                 
-                            <div className="keywords">
-                                <p className='over-heading'>Keywords</p>
-
-                                <div className='keyword-container'>
-                                    {result.keywords.map(keyword => (<div className='keyword'>{keyword}</div>))}
-                                </div>
-
-                            </div>
-                            
                             <div className="suggestions">
                                 <p className='over-heading'>Suggestions</p>
 
@@ -255,15 +241,24 @@ const Home = () => {
                                 ))}
                                 
                             </div> 
+                            
+                            {/* <div className="keywords">
+                                <p className='over-heading'>Keywords</p>
+
+                                <div className='keyword-container'>
+                                    {result.keywords.map(keyword => (<div className='keyword'>{keyword}</div>))}
+                                </div>
+
+                            </div> */}
 
                             <div className="review-breakdown">
                                 <p className='over-heading'>Manual Analysis</p>
 
                                 <div className='results'>
                                     <div className="expand-btns">
-                                        <div className='sentiment-category' onClick={() => expandReviews("neg")}>Negative &gt;</div>
-                                        <div className='sentiment-category' onClick={() => expandReviews("neu")}>Neutral &gt;</div>
-                                        <div className='sentiment-category' onClick={() => expandReviews("pos")}>Positive &gt;</div>
+                                        <div className='sentiment-category-e' onClick={() => expandReviews("neg")}>Negative &gt;</div>
+                                        <div className='sentiment-category-e' onClick={() => expandReviews("neu")}>Neutral &gt;</div>
+                                        <div className='sentiment-category-e' onClick={() => expandReviews("pos")}>Positive &gt;</div>
                                     </div>
                                     
                                     <div className="reviews">

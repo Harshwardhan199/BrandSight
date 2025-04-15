@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
 
+    min-height: 100vh;
     font-family:'Poppins', Times, serif;
 }
 
@@ -11,11 +12,13 @@
     justify-content: space-between;
 
     width: 100%;
+    /* height: 70px; */
+
     position: fixed;
     background-color: white;
 
     padding-bottom: 5px;
-    padding: 2px 10px;
+    padding: 0px 10px;
 
     border-bottom: 1px solid black;
 
@@ -43,7 +46,7 @@
     padding: 0px 16px;
     margin-left: 10px;
 
-    font-size: 36px;
+    font-size: clamp(24px, 5vw, 36px);
 
     background-color: #01b954;
     color: white;
@@ -51,11 +54,15 @@
 .profile-section{
     display: flex;
 
+    margin-right: 10px;
     gap: 20px;
 }.user-name{
-    color: white;
+    text-align: end;
+    display: flex;
+    align-items: center;
 
-    font-size: 24px;
+    color: white;
+    font-size: clamp(16px, 3vw, 24px);
 }
 .profile-img{
     height: 40px;
@@ -82,7 +89,7 @@
 
     height: 100vh;
 
-    padding-top: 74px;
+    padding-top: 71px;
     padding-left: 5px;
     padding-right: 5px;
 
@@ -123,18 +130,21 @@
     height: 90vh;
     margin-top: 90px;
     margin-left: 70px;
-    margin-right: 5px;
+    margin-right: 10px;
     background-color: #ffffff;
 }
 .heading{
     text-align: center;
     font-weight: 1000;
-    font-size: 64px;
+    font-size: clamp(31px, 8vw, 64px);
 
-    margin-top: 14%;
+    /* margin-top: 14%; */
+
+    /* transition: font-size 0.3s ease; */
 }
 .sub-heading{
-    font-size: 24px;
+    text-align: center;
+    font-size: clamp(16px, 5vw, 24px);
 
     margin-top: 20px;
 }
@@ -144,8 +154,8 @@
 
     border-radius: 20px;
     
-    width: 60%;
-    min-width: 450px;
+    width: 70%;
+    min-width: 300px;
 
     height: 50px;
 
@@ -172,6 +182,9 @@
 
     margin-top: 60px;
 }
+.result-container{
+    width: 100%;
+}
 .overview{
     display: flex;
     flex-direction: column;
@@ -189,7 +202,7 @@
 .over-heading{
     color: black;
     font-weight: 1000;
-    font-size: 48px;
+    font-size: clamp(32px, 6vw, 48px);
 }
 .over-results{
     display: flex;
@@ -204,8 +217,8 @@
     margin-top: 30px;
 
     color: black;
-
-    font-size: 28px;
+ 
+    font-size: clamp(16px, 3vw, 28px);
 }
 
 .review-breakdown{
@@ -249,6 +262,7 @@
 
     color: white;
     font-size: 36px;
+    font-size: clamp(12px, 2vw, 36px);
 }
 .reviews{
     display: flex;
@@ -291,7 +305,17 @@
     font-size: 20px;
     color: color;
 }
+.sentiment-category-e{
+    padding: 10px;
 
+    background-color: #000000;
+
+    border-radius: 16px;
+
+    color: white;
+    font-size: 36px;
+    font-size: clamp(20px, 2vw, 36px);
+}
 .keywords{
     display: flex;
     flex-direction: column;
@@ -356,4 +380,19 @@
     margin-top: 40px;
     font-size: 24px;
     color: Black;
+}
+
+
+@media (max-width: 480px) {
+    .user-name{
+        display: none;
+    }
+}
+@media (max-width: 700px) {
+    .sidebar{
+        display: none;
+    }
+    .main-panel{
+        margin-left: 10px;
+    }
 }
