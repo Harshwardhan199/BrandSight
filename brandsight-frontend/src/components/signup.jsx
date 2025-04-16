@@ -128,7 +128,9 @@ const SignUp = () =>{
         }
     };
 
-    const handleGoogleSignIn = async () => {
+    const handleGoogleSignIn = async (e) => {
+        e.preventDefault();
+        
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
@@ -179,7 +181,7 @@ const SignUp = () =>{
                                 type="text" 
                                 value={name} 
                                 onChange={e => setName(e.target.value)} 
-                                required />
+                                />
                         </div>
 
                         <div className="label-input">
@@ -192,7 +194,7 @@ const SignUp = () =>{
                                 onChange={(e) => checkAndSetEmail(e)}
                                 onFocus={() => setIsEmailFocused(true)}
                                 onBlur={() => setIsEmailFocused(false)}
-                                required />
+                                />
                         </div>
 
                         {isEmailFocused && email.length>0 && !emailIsValid && <p className="error-text">Enter Valid Email Address</p>}
@@ -201,13 +203,13 @@ const SignUp = () =>{
                             <label>Password</label>
                             <input 
                                 className="password-section" 
-                                type="text" 
+                                type="password" 
                                 value={password}
                                 ref={passwordRef}
                                 onChange={(e) => checkAndSetPassword(e)}
                                 onFocus={() => setIsPasswordFocused(true)}
                                 onBlur={() => setIsPasswordFocused(false)}
-                                required />
+                                />
                         </div>
 
                         {isPasswordFocused && password.length > 0 && (
@@ -221,13 +223,13 @@ const SignUp = () =>{
                             <label>Confirm Password</label>
                             <input 
                                 className="password-section" 
-                                type="text" 
+                                type="password" 
                                 value={confirmPassword}
                                 ref={confirmPasswordRef}
                                 onChange={(e) => checkAndSetConfirmPassword(e)}
                                 onFocus={() => setIsConfirmPasswordFocused(true)}
                                 onBlur={() => setIsConfirmPasswordFocused(false)}
-                                required />
+                                />
                         </div>
 
                         {isConfirmPasswordFocused && confirmPassword.length > 0 && passwordNotMatched && <p className="error-text">Passwords don't match</p>}

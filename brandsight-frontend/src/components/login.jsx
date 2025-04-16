@@ -24,9 +24,16 @@ const Login = () =>{
 
     const [emailIsValid, setEmailIsValid] = useState(false);
 
+    const [allFieldsFIlled, setAllFieldsFIlled] = useState(true);
+    const [loginSuccess, setLoginSuccess] = useState(true);
+
     const checkAndSetEmail = (e) => {
         const emailToCheck = e.target.value;
+        
         setEmail(emailToCheck);
+
+        setAllFieldsFIlled(true);
+        setLoginSuccess(true);
         
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const testEmail = emailPattern.test(emailToCheck);
@@ -43,18 +50,34 @@ const Login = () =>{
 
     const handleEmailLogin = async (e) => {
         e.preventDefault();
+
+        if (email === "" | password === ""){
+            return setAllFieldsFIlled(false);
+        }
+        else{
+            setAllFieldsFIlled(true);
+        }
         try {
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
     
           console.log("Logged in as:", userCredential.user.email);
     
+          setLoginSuccess(true);
+
           navigate("/home");
         } catch (error) {
           console.error("Login error:", error.message);
+
+          setLoginSuccess(false);
         }
     }
 
-    const handleGoogleSignIn = async () => {
+    const handleGoogleSignIn = async (e) => {
+        e.preventDefault();
+        
+        setAllFieldsFIlled(true);
+        setLoginSuccess(true);
+
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
@@ -105,7 +128,7 @@ const Login = () =>{
                                 value={email}
                                 ref={emailRef}
                                 onChange={(e) => checkAndSetEmail(e)}
-                                required
+                            
                             />
                         </div>
 
@@ -115,13 +138,22 @@ const Login = () =>{
                             <label>Password</label>
                             <input 
                                 className="password-section"
-                                type="text" 
+                                type="password" 
                                 value={password}
                                 ref={passwordRef}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+
+                                    setAllFieldsFIlled(true);
+                                    setLoginSuccess(true);
+                                }}
                             />
                         </div>
+
+                        {email.length===0 && password.length===0 && !allFieldsFIlled&& <p className="error-text">Please fill all fields</p>}
+
+                        {!loginSuccess && <p className="error-text">Email or Password is wrong</p>}
+
                         <button className="submit-btn" type="submit">Login</button>
 
                         <div className="line"><span className="or-text">Or</span></div>
