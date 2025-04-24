@@ -14,9 +14,13 @@ const Home = () => {
     const [username, setUsername] = useState("User");
     const [profileImageUrl, setProfileImageUrl] = useState("");
     const [brandURL, setBrandURL] = useState("");
-    
+    const [fromDate, setFromDate] = useState("");
+    const [tillDate, setTillDate] = useState("");
+
     const [result, setResult] = useState({
-        summary: "",
+        title: "",
+        icon: "",
+        description: "",
         reviews: [],
         keywords: [],
         sentiment_distribution: {},
@@ -28,6 +32,10 @@ const Home = () => {
     const [expandNegative, setExpandNegative] = useState(false);
     const [expandNeutral, setExpandNeutral] = useState(false);
     const [expandPositive, setExpandPositive] = useState(false);
+
+    const [toogleSidebar, setToogleSidebar] = useState(false);
+    const [viewDashboard, setViewDashboard] = useState(true);
+    const [viewHistory, setViewHistory] = useState(false);
 
     useEffect(() => {
     if (user) {
@@ -109,8 +117,11 @@ const Home = () => {
         
         try{
             const response = await axios.post("http://localhost:5000/api/nlpModel/analyze", {
+                UID: user.uid,
                 brandURL,
-                brandURLType
+                brandURLType,
+                fromDate,
+                tillDate
                 }, {
                 headers: {
                     "Content-Type": "application/json",
@@ -120,7 +131,9 @@ const Home = () => {
             console.log("Analysis Report:", response.data);
 
             setResult({
-                summary: response.data.summary,
+                title: response.data.title,
+                icon: response.data.icon,
+                description: response.data.description,
                 reviews: response.data.analyzed_reviews,
                 keywords: response.data.keywords,
                 sentiment_distribution: response.data.sentiment_distribution,
@@ -153,12 +166,42 @@ const Home = () => {
         }
     };
 
+    const ToogleSideBar = () => {
+        setToogleSidebar(!toogleSidebar);
+    };
+
+    const ViewDashboard = () => {
+        setViewHistory(false);
+        setViewDashboard(true);
+    }
+
+    const ViewHistory = async () => {
+        setViewDashboard(false);
+        setViewHistory(true);
+
+        try{
+            const historyResponse = await axios.post("http://localhost:5000/api/users/getHistory", {
+                UID: user.uid
+                }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            const history = historyResponse.data;
+            console.log(history);
+        }
+        catch(error){
+            console.error("Error Fetching User Data:", error.message);
+        }
+    };
+        
     return (
         <>
             <div className="body-division">
                 <div className="nav-bar">
                     <div className="menu-button">
-                        <img src="/menu-icon.png" alt="Menu" className="icon-image" />
+                        <img src="/menu-icon.png" alt="Menu" className="icon-image" onClick={ToogleSideBar}/>
                         <p className="logo">BrandSight </p>
                     </div>
 
@@ -177,34 +220,48 @@ const Home = () => {
                 </div>
 
                 <div className="sidebar">
-                    <div className="sidebar-upper">
-                        <div className="nav-link" style={{ marginTop: '10px' }}>
-                            <img src="/home-icon.png" alt="Dashboard" className="icon-image" />
-                            {/* <a href="">Dashboard</a>  */}
+                    <div className="sideBar-left-part">
+                        <div className="sidebar-upper">
+                            <div className="nav-link-img">
+                                <img src="/home-icon.png" alt="Dashboard" className="icon-image" onClick={ViewDashboard} style={{marginTop: '0px', borderTop: '2px solid black'}}/>
+                            </div>
+                            <div className="nav-link-img">
+                                <img src="/analysis-icon.png" alt="Analyze" className="icon-image" />
+                            </div>
+                            <div className="nav-link-img">
+                                <img src="/history-icon.png" alt="History" className="icon-image" onClick={ViewHistory}/>
+                            </div>
                         </div>
-                        <div className="nav-link">
-                            <img src="/analysis-icon.png" alt="Analyze" className="icon-image" />
-                            {/* <a href="">Analyze New Brand</a> */}
-                        </div>
-                        <div className="nav-link">
-                            <img src="/history-icon.png" alt="History" className="icon-image" />
-                            {/* <a href="">Previous Analyses</a> */}
+
+                        <div className="sidebar-bottom"> 
+                            <div className="nav-link-img">
+                                <img src="/settings-icon.png" alt="Settings" className="icon-image" onClick={Logout} />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="sidebar-bottom">
-                        <div className="nav-link">
-                            <img src="/settings-icon.png" alt="Settings" className="icon-image" onClick={Logout} />
-                            {/* <a href="">Settings</a>  */}
+                    <div className="sideBar-right-part">
+                        <div className="sidebar-upper">
+                            <div className="nav-link-label">
+                                {toogleSidebar && <a href="">Dashboard</a>} 
+                            </div>
+                            <div className="nav-link-label">
+                                {toogleSidebar && <a href="">Analyze</a>}
+                            </div>
+                            <div className="nav-link-label">
+                                {toogleSidebar && <a href="">History</a>}
+                            </div>
                         </div>
-                        {/* <div className="nav-link">
-                            <img src="/logout-icon.png" alt="Logout" className="icon-image" />
-                            <a href="">Logout</a>
-                        </div>  */}
+
+                        <div className="sidebar-bottom"> 
+                            <div className="nav-link-label">
+                                {toogleSidebar && <a href="">Settings</a>}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="main-panel">
+                {viewDashboard && <div className="main-panel">
                 
                     <p className="heading">Analyze a Brand's Reputation</p>
                     <p className="sub-heading">Get real-time sentiment insights from app or store reviews</p>
@@ -214,7 +271,25 @@ const Home = () => {
                         placeholder="Enter URL" 
                         value={brandURL} 
                         onChange={(e) => setBrandURL(e.target.value)}/>
-                
+
+                    <div className="range-selection">
+                        <div>
+                            <label>Analyze from: </label>
+                            <input 
+                                type="date"
+                                value={fromDate} 
+                                onChange={(e) => setFromDate(e.target.value)}/> 
+                        </div>
+
+                        <div>
+                            <label>Till: </label>
+                            <input 
+                                type="date"
+                                value={tillDate} 
+                                onChange={(e) => setTillDate(e.target.value)}/> 
+                        </div>
+                    </div>
+                    
                     <button className="fetch-btn" onClick={analyzeBrand}>Fetch & Analyze ➜</button>
 
                     {gotResult && 
@@ -222,6 +297,15 @@ const Home = () => {
                             <div className="overview">
                                 <p className='over-heading'>Overview</p>
 
+                                <div className="about-brand">
+                                    <img src={result.icon} alt="Brand Image" className="brand-image"/>
+                                    <div className="about-brand-content">
+                                        <p>Title: {result.title}</p>
+                                        <p>Description: {result.description}</p>
+                                    </div>
+
+                                </div>
+                            
                                 <div className='over-results'>
                                     <div className='sentiment-category'>Negative: {result.sentiment_distribution['negative']}%</div>
                                     <div className='sentiment-category'>Neutral: {result.sentiment_distribution['neutral']}%</div>
@@ -278,8 +362,11 @@ const Home = () => {
 
                         </div>
                     }
-                </div>
+                </div>}
 
+                {viewHistory && <div className="main-panel">
+                    <h1>History Panel</h1>
+                </div>}
             </div>
         </>
     );
