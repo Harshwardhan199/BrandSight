@@ -174,10 +174,6 @@
     text-align: center;
     font-weight: 1000;
     font-size: clamp(31px, 8vw, 64px);
-
-    /* margin-top: 14%; */
-
-    /* transition: font-size 0.3s ease; */
 }
 .sub-heading{
     text-align: center;
@@ -208,7 +204,14 @@
 
     margin-top: 10px;
 
-    gap: 50px;
+    gap: 10px;
+}
+.range-selection label{
+    font-size: 18px;
+}
+.range-selection input{
+    width: 40px;
+    height: 23px;
 }
 .fetch-btn{
     background-color: #01b954;
@@ -239,7 +242,7 @@
     flex: 1;
 
     padding: 30px 30px;
-    margin: 80px 20px 0px 20px;
+    margin: 70px 5px 20px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);
@@ -299,7 +302,7 @@
     flex: 1;
 
     padding: 30px 30px;
-    margin: 80px 20px 50px 20px;
+    margin: 20px 5px 20px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);
@@ -439,10 +442,17 @@
     flex: 1;
 
     padding: 30px 30px;
-    margin: 80px 20px 50px 20px;
+    margin: 20px 5px 20px 20px;
 
     border-radius: 8px;
     background-color: rgb(231, 231, 231);
+}
+.suggestion-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    flex: 1;
 }
 .suggestion{
     margin-top: 80px;
@@ -451,7 +461,42 @@
     color: Black;
 }
 
+.suggestion-block {    
+    border: 1px solid #ddd;
+    border-radius: 10px;
 
+    padding: 36px;
+    margin-bottom: 14px;
+
+    font-size: clamp(20px, 2vw, 30px);
+}
+.suggestion-block h4{    
+    margin-bottom: 10px;
+
+}
+
+.reports-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 98%;
+
+    padding: 16px 10px;
+
+    margin: 0px 20px 20px 20px;
+
+    border-radius: 8px;
+    background-color: rgb(231, 231, 231);
+}
+
+.report{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 50px;
+}
 @media (max-width: 480px) {
     .user-name{
         display: none;

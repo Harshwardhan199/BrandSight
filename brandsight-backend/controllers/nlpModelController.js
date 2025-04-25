@@ -28,9 +28,9 @@ const getAppIdFromUrl = (brandURL) => {
   }
 };
 
-const analyzeSentiment = async (uid, reviews, title, icon, description) => {
+const analyzeSentiment = async (uid, brandURLType, title, icon, description, reviews) => {
   try {
-      const response = await axios.post("http://localhost:5001/analyze", { uid, reviews, title, icon, description });
+      const response = await axios.post("http://localhost:5001/analyze", {uid, brandURLType, title, icon, description, reviews});
 
       await saveReport(response.data);
       console.log("Saved report in DB");
@@ -43,7 +43,7 @@ const analyzeSentiment = async (uid, reviews, title, icon, description) => {
 };
 
 const analyze = async (req, res) => {
-  const { UID,  brandURL, brandURLType, fromDate, tillDate } = req.body;
+  const { UID,  brandURL, brandURLType, reviewNumber } = req.body;
 
   if (brandURLType === "PlayStoreApp") {
     const appID = getAppIdFromUrl(brandURL);
@@ -62,7 +62,7 @@ const analyze = async (req, res) => {
       const reviews = await gplay.reviews({
         appId: appID,
         sort: gplay.sort.NEWEST, 
-        num: 1, 
+        num: reviewNumber, 
       });
       const formattedReviews = reviews.data.map(review => ({
         user: review.userName,  
@@ -75,7 +75,7 @@ const analyze = async (req, res) => {
       console.log("Scrapped brand description and Reviews.");
       console.log("Sent for analysis");
 
-      const analysisOutput = await analyzeSentiment(UID, formattedReviews, about.title, about.icon, about.description);
+      const analysisOutput = await analyzeSentiment(UID, brandURLType, about.title, about.icon, about.description, formattedReviews);
 
       //console.log("Analyzed Output: ",analysisOutput);
 

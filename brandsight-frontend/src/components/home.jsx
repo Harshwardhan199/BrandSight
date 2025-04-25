@@ -14,8 +14,7 @@ const Home = () => {
     const [username, setUsername] = useState("User");
     const [profileImageUrl, setProfileImageUrl] = useState("");
     const [brandURL, setBrandURL] = useState("");
-    const [fromDate, setFromDate] = useState("");
-    const [tillDate, setTillDate] = useState("");
+    const [reviewNumber, setReviewNumber] = useState(10);
 
     const [result, setResult] = useState({
         title: "",
@@ -27,6 +26,9 @@ const Home = () => {
         suggestions: []
     });
 
+    const [history, setHistory] = useState([]);
+    const [desiredReport, setDesiredReport] = useState([]);
+    
     const [gotResult, setGotResult] = useState(false);
 
     const [expandNegative, setExpandNegative] = useState(false);
@@ -36,6 +38,7 @@ const Home = () => {
     const [toogleSidebar, setToogleSidebar] = useState(false);
     const [viewDashboard, setViewDashboard] = useState(true);
     const [viewHistory, setViewHistory] = useState(false);
+    const [viewReport, setViewReport] = useState(false);
 
     useEffect(() => {
     if (user) {
@@ -120,8 +123,7 @@ const Home = () => {
                 UID: user.uid,
                 brandURL,
                 brandURLType,
-                fromDate,
-                tillDate
+                reviewNumber,
                 }, {
                 headers: {
                     "Content-Type": "application/json",
@@ -171,8 +173,34 @@ const Home = () => {
     };
 
     const ViewDashboard = () => {
+        setViewReport(false);
         setViewHistory(false);
         setViewDashboard(true);
+    }
+
+    const Suggestions = ({ suggestions }) => {
+        return (
+        <section className="suggestion-section">    
+            {suggestions.map((s, idx) => {
+
+            const [rawHeading, ...rest] = s.split(':');
+            const heading = rawHeading.trim();               
+            const body = rest.join(':');                      
+            const points = body.split(/\n-\s*/).filter(Boolean); 
+    
+            return (
+                <article key={idx} className="suggestion-block">
+                <h4>{heading}:</h4>
+                <ul>
+                    {points.map((p, i) => (
+                    <li key={i}>{p.trim()}</li>
+                    ))}
+                </ul>
+                </article>
+            );
+            })}
+        </section>
+        );
     }
 
     const ViewHistory = async () => {
@@ -188,14 +216,44 @@ const Home = () => {
                 },
             });
     
-            const history = historyResponse.data;
-            console.log(history);
+            console.log(historyResponse.data["data"]);
+
+            setHistory(historyResponse.data["data"]);
+            
         }
         catch(error){
             console.error("Error Fetching User Data:", error.message);
         }
     };
+    
+    const formatDate = iso => {
+        const d = new Date(iso);
+    
+        const day   = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year  = d.getFullYear();
+    
+        let hours   = d.getHours();              // 0‑23
+        const mins  = String(d.getMinutes()).padStart(2, '0');
+    
+        const ampm  = hours >= 12 ? 'PM' : 'AM';
+        hours       = hours % 12 || 12;          // 0 → 12, 13 → 1, etc.
+    
+        return `${day}-${month}-${year} ${hours}:${mins} ${ampm}`;
+    };
+    
+    const OpenReport = (key) =>{
         
+        const selectedReport = history.find(report => report["_id"] === key);
+
+        setDesiredReport(selectedReport);
+
+        setViewHistory(false);
+        setViewReport(true);
+
+        console.log(selectedReport);
+    }
+      
     return (
         <>
             <div className="body-division">
@@ -273,100 +331,166 @@ const Home = () => {
                         onChange={(e) => setBrandURL(e.target.value)}/>
 
                     <div className="range-selection">
-                        <div>
-                            <label>Analyze from: </label>
-                            <input 
-                                type="date"
-                                value={fromDate} 
-                                onChange={(e) => setFromDate(e.target.value)}/> 
-                        </div>
-
-                        <div>
-                            <label>Till: </label>
-                            <input 
-                                type="date"
-                                value={tillDate} 
-                                onChange={(e) => setTillDate(e.target.value)}/> 
-                        </div>
+                        <label>Number of latest reviews to Analyze: </label>
+                        <input 
+                            type="number"
+                            className="review-number-input" 
+                            value={reviewNumber} 
+                            onChange={(e) => setReviewNumber(e.target.value)}/>
                     </div>
                     
                     <button className="fetch-btn" onClick={analyzeBrand}>Fetch & Analyze ➜</button>
 
-                    {gotResult && 
-                        <div className="result-container">
-                            <div className="overview">
-                                <p className='over-heading'>Overview</p>
+                    {gotResult && <div className="result-container">
+                        <div className="overview">
+                            <p className='over-heading'>Overview</p>
 
-                                <div className="about-brand">
-                                    <img src={result.icon} alt="Brand Image" className="brand-image"/>
-                                    <div className="about-brand-content">
-                                        <p>Title: {result.title}</p>
-                                        <p>Description: {result.description}</p>
-                                    </div>
-
-                                </div>
-                            
-                                <div className='over-results'>
-                                    <div className='sentiment-category'>Negative: {result.sentiment_distribution['negative']}%</div>
-                                    <div className='sentiment-category'>Neutral: {result.sentiment_distribution['neutral']}%</div>
-                                    <div className='sentiment-category'>Positive: {result.sentiment_distribution['positive']}%</div>
+                            <div className="about-brand">
+                                <img src={result.icon} alt="Brand Image" className="brand-image"/>
+                                <div className="about-brand-content">
+                                    <p>Title: {result.title}</p>
+                                    <p>Description: {result.description}</p>
                                 </div>
 
-                                <p className='over-text'>Most users had a positive experience overall.</p>
                             </div>
-                
-                            <div className="suggestions">
-                                <p className='over-heading'>Suggestions</p>
+                        
+                            <div className='over-results'>
+                                <div className='sentiment-category'>Negative: {result.sentiment_distribution['negative']}%</div>
+                                <div className='sentiment-category'>Neutral: {result.sentiment_distribution['neutral']}%</div>
+                                <div className='sentiment-category'>Positive: {result.sentiment_distribution['positive']}%</div>
+                            </div>
 
-                                {result.suggestions.map(suggestion => (
-                                    <ul>
-                                        <li><p className='suggestion'>{suggestion}</p></li>
-                                    </ul>
-                                ))}
+                            <p className='over-text'>Most users had a positive experience overall.</p>
+                        </div>
+            
+                        <div className="suggestions">
+                            <p className='over-heading'>Suggestions</p>
+
+                            <Suggestions suggestions={result.suggestions} />
+
+                        </div> 
+                        
+                        {/* <div className="keywords">
+                            <p className='over-heading'>Keywords</p>
+
+                            <div className='keyword-container'>
+                                {result.keywords.map(keyword => (<div className='keyword'>{keyword}</div>))}
+                            </div>
+
+                        </div> */}
+
+                        <div className="review-breakdown">
+                            <p className='over-heading'>Manual Analysis</p>
+
+                            <div className='results'>
+                                <div className="expand-btns">
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("neg")}>Negative &gt;</div>
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("neu")}>Neutral &gt;</div>
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("pos")}>Positive &gt;</div>
+                                </div>
                                 
-                            </div> 
-                            
-                            {/* <div className="keywords">
-                                <p className='over-heading'>Keywords</p>
-
-                                <div className='keyword-container'>
-                                    {result.keywords.map(keyword => (<div className='keyword'>{keyword}</div>))}
+                                <div className="reviews">
+                                    {expandNegative && 
+                                        (result.reviews.filter(review => (review["sentiment"] === 'NEGATIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
+                                    {expandNeutral &&
+                                        (result.reviews.filter(review => (review["sentiment"] === 'NEUTRAL')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
+                                    {expandPositive &&
+                                        (result.reviews.filter(review => (review["sentiment"] === 'POSITIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
                                 </div>
-
-                            </div> */}
-
-                            <div className="review-breakdown">
-                                <p className='over-heading'>Manual Analysis</p>
-
-                                <div className='results'>
-                                    <div className="expand-btns">
-                                        <div className='sentiment-category-e' onClick={() => expandReviews("neg")}>Negative &gt;</div>
-                                        <div className='sentiment-category-e' onClick={() => expandReviews("neu")}>Neutral &gt;</div>
-                                        <div className='sentiment-category-e' onClick={() => expandReviews("pos")}>Positive &gt;</div>
-                                    </div>
-                                    
-                                    <div className="reviews">
-                                        {expandNegative && 
-                                            (result.reviews.filter(review => (review["sentiment"] === 'NEGATIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
-                                        }
-                                        {expandNeutral &&
-                                            (result.reviews.filter(review => (review["sentiment"] === 'NEUTRAL')).map(review => (<div className='review'>{review["review"]}</div>)))
-                                        }
-                                        {expandPositive &&
-                                            (result.reviews.filter(review => (review["sentiment"] === 'POSITIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
-                                        }
-                                    </div>
-                                </div>
-
                             </div>
 
                         </div>
-                    }
+
+                    </div>}
+
                 </div>}
 
-                {viewHistory && <div className="main-panel">
-                    <h1>History Panel</h1>
+                {viewHistory && <div className="main-panel" style={{justifyContent: "flex-start"}}>
+
+                    {history.map((report) => (
+                        <div className="reports-container" key={report._id} onClick={() => OpenReport(report._id)}>
+                            <div className="report">
+                                <img src={report["icon"]} alt="Brand Image" className="brand-image"/>
+                                <div className="about-brand-content">
+                                    <p>Title: {report["title"]}</p>
+                                    <p>Reviews Analyzed: {report["analyzed_reviews"].length}</p>
+                                    <p>{formatDate(report["createdAt"])}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
                 </div>}
+
+                {viewReport && <div className="main-panel">
+                    <div className="result-container">
+                        <div className="overview" style={{marginTop:'0px', marginRight:'5px'}}>
+                            <p className='over-heading'>Overview</p>
+
+                            <div className="about-brand">
+                                <img src={desiredReport["icon"]} alt="Brand Image" className="brand-image"/>
+                                <div className="about-brand-content">
+                                    <p>Title: {desiredReport["title"]}</p>
+                                    <p>Description: {desiredReport["description"]}</p>
+                                </div>
+                            </div>
+                        
+                            <div className='over-results'>
+                                <div className='sentiment-category'>Negative: {desiredReport["sentiment_distribution"]['negative']}%</div>
+                                <div className='sentiment-category'>Neutral: {desiredReport["sentiment_distribution"]['neutral']}%</div>
+                                <div className='sentiment-category'>Positive: {desiredReport["sentiment_distribution"]['positive']}%</div>
+                            </div>
+
+                            <p className='over-text'>Most users had a positive experience overall.</p>
+                        </div>
+            
+                        <div className="suggestions" style={{marginTop:'20px', marginBottom:'0px', marginRight:'5px'}}>
+                            <p className='over-heading'>Suggestions</p>
+
+                            <Suggestions suggestions={desiredReport["suggestions"]} />
+
+                        </div> 
+                        
+                        {/* <div className="keywords">
+                            <p className='over-heading'>Keywords</p>
+
+                            <div className='keyword-container'>
+                                {result.keywords.map(keyword => (<div className='keyword'>{keyword}</div>))}
+                            </div>
+
+                        </div> */}
+
+                        <div className="review-breakdown" style={{marginTop:'20px', marginBottom:'20px', marginRight:'5px'}}>
+                            <p className='over-heading'>Manual Analysis</p>
+
+                            <div className='results'>
+                                <div className="expand-btns">
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("neg")}>Negative &gt;</div>
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("neu")}>Neutral &gt;</div>
+                                    <div className='sentiment-category-e' onClick={() => expandReviews("pos")}>Positive &gt;</div>
+                                </div>
+                                
+                                <div className="reviews">
+                                    {expandNegative && 
+                                        (desiredReport["analyzed_reviews"].filter(review => (review["sentiment"] === 'NEGATIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
+                                    {expandNeutral &&
+                                        (desiredReport["analyzed_reviews"].filter(review => (review["sentiment"] === 'NEUTRAL')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
+                                    {expandPositive &&
+                                        (desiredReport["analyzed_reviews"].filter(review => (review["sentiment"] === 'POSITIVE')).map(review => (<div className='review'>{review["review"]}</div>)))
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>}
+
             </div>
         </>
     );
